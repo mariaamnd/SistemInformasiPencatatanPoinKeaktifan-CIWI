@@ -19,7 +19,7 @@ public class SecondaryController {
     
     @FXML
     private void switchToJabatan() throws IOException {
-        App.setRoot("jabatan");
+        App.setRoot("jabatanKegiatan");
     }
     
 

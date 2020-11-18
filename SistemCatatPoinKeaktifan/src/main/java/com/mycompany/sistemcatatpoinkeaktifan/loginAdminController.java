@@ -1,41 +1,43 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.mycompany.sistemcatatpoinkeaktifan;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javafx.scene.control.PasswordField;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 
-public class PrimaryController implements Initializable{
-   @FXML
-   private Button cancelButton;
-   @FXML
-   private Text loginMessageLabel;
-    @FXML
-    private ImageView brandingImageView;
-    @FXML
+public class loginAdminController {
+
+     @FXML
     private TextField usernameTextField;
+
+    @FXML
+    private TextField enterPasswordField;
+
     @FXML
     private Button loginButton;
+
     @FXML
-    private PasswordField enterPasswordField;
-   
-   
-   
-   public void loginButtonOnAction(ActionEvent event){
+    private Button cancelButton;
+
+    @FXML
+    private Label loginMessageLabel;
+    
+    @FXML
+    private void cancelSwitchTampilan() throws IOException {
+        App.setRoot("TampilanAwal");
+    }
+    
+    public void loginButtonOnAction(ActionEvent event){
        
        if(usernameTextField.getText().isBlank()== false && enterPasswordField.getText().isBlank() == false){
            validateLogin();
@@ -43,19 +45,12 @@ public class PrimaryController implements Initializable{
            loginMessageLabel.setText("Please enter username and password");
        }
    }
-   
-   
-   
-   public void cancelButtonOnAction() throws IOException{
-       App.setRoot("TampilanAwal");
-   }
-   
-   
-   public void validateLogin(){
+    
+     public void validateLogin(){
        DatabaseConnection connectNow = new DatabaseConnection();
        Connection connectDB = connectNow.getConnection();
        
-       String verifyLogin = "SELECT count(1) FROM user_account WHERE username = '" + usernameTextField.getText() + "' AND password = '" + enterPasswordField.getText() + "'";
+       String verifyLogin = "SELECT count(1) FROM admin_account WHERE username = '" + usernameTextField.getText() + "' AND password = '" + enterPasswordField.getText() + "'";
        
        try {
            Statement statement = connectDB.createStatement();
@@ -64,7 +59,7 @@ public class PrimaryController implements Initializable{
            while (queryResult.next()){
                if(queryResult.getInt(1) == 1) {
                    loginMessageLabel.setText("Congratulation!");
-                    App.setRoot("secondary");
+                    App.setRoot("menuAdmin");
                } else {
                    loginMessageLabel.setText("Invalid Login. Please try again");
                }
@@ -74,12 +69,6 @@ public class PrimaryController implements Initializable{
            e.getCause();
         }
    }
-   
-   
-   
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-    }
 }
+

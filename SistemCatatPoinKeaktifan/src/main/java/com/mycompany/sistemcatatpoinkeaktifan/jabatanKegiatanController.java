@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.sistemcatatpoinkeaktifan;
 
 import java.io.IOException;
@@ -26,7 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author acer
  */
-public class PrestasiController implements Initializable{
+public class jabatanKegiatanController implements Initializable{
     
     @FXML
     private Button cancelButton;
@@ -55,25 +50,25 @@ public class PrestasiController implements Initializable{
     private TextField InternasionalTextField;
 
     @FXML
-    private TableView<Prestasi> PrestasiTableView;
+    private TableView<Jabatan> jabatanTableView;
 
     @FXML
-    private TableColumn<Prestasi, Integer> colID;
+    private TableColumn<Jabatan, Integer> colID;
 
     @FXML
-    private TableColumn<Prestasi, String> colJenis;
+    private TableColumn<Jabatan, String> colJenis;
 
     @FXML
-    private TableColumn<Prestasi, Integer> colIntern;
+    private TableColumn<Jabatan, Integer> colIntern;
 
     @FXML
-    private TableColumn<Prestasi, Integer> colDIY;
+    private TableColumn<Jabatan, Integer> colDIY;
     
     @FXML
-    private TableColumn<Prestasi, Integer> colNasional;
+    private TableColumn<Jabatan, Integer> colNasional;
     
     @FXML
-    private TableColumn<Prestasi, Integer> colInternasional;
+    private TableColumn<Jabatan, Integer> colInternasional;
 
     @FXML
     private Button updateButton;
@@ -97,63 +92,63 @@ public class PrestasiController implements Initializable{
         
     }
     
-    public ObservableList<Prestasi> getPrestasiList(){
-        ObservableList<Prestasi> kegiatanprestasiList = FXCollections.observableArrayList();
+    public ObservableList<Jabatan> getJabatanList(){
+        ObservableList<Jabatan> kegiatanjabatanList = FXCollections.observableArrayList();
         DatabaseConnection connectNow = new DatabaseConnection();
         Connection connectDB = connectNow.getConnection();
-        String query = "SELECT * FROM KegiatanPrestasi";
+        String query = "SELECT * FROM KegiatanJabatan";
         Statement st;
         ResultSet rs;
         
         try{
             st = connectDB.createStatement();
             rs = st.executeQuery(query);
-            Prestasi kegiatanprestasi;
+            Jabatan kegiatanjabatan;
             while(rs.next()){
-                kegiatanprestasi = new Prestasi(rs.getInt("IDPrestasi"), rs.getString("JenisPrestasi"), rs.getInt("PoinIntern"), rs.getInt("PoinDIY"),rs.getInt("PoinNasional"),rs.getInt("PoinInternasional"));
-                kegiatanprestasiList.add(kegiatanprestasi);
+                kegiatanjabatan = new Jabatan(rs.getInt("IDJabatan"), rs.getString("JenisJabatan"), rs.getInt("PoinIntern"), rs.getInt("PoinDIY"), rs.getInt("PoinNasional"), rs.getInt("PoinInternasional"));
+                kegiatanjabatanList.add(kegiatanjabatan);
             }
         }catch(Exception ex){
             ex.printStackTrace();
         }
-        return kegiatanprestasiList;
+        return kegiatanjabatanList;
     }
     
-    public void showPrestasi(){
-        ObservableList<Prestasi> list = getPrestasiList();
+    public void showJabatan(){
+        ObservableList<Jabatan> list = getJabatanList();
         
-        colID.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("IDPrestasi"));
-        colJenis.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("JenisPrestasi"));
-        colIntern.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinIntern"));
-        colDIY.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinDIY"));
-        colNasional.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinNasional"));
-        colInternasional.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinInternasional"));
+        colID.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("IDJabatan"));
+        colJenis.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("JenisJabatan"));
+        colIntern.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("PoinIntern"));
+        colDIY.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("PoinDIY"));
+        colNasional.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("PoinNasional"));
+        colInternasional.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("PoinInternasional"));
         
-        PrestasiTableView.setItems(list);
+        jabatanTableView.setItems(list);
     }
     
     private void insertRecord(){
-        String query = "INSERT INTO KegiatanPrestasi VALUES (" + IDTextField.getText() + ", '" + JenisTextField.getText() + "'," + InternTextField.getText() + "," + DIYTextField.getText()+ "," + NasionalTextField.getText()+ "," + InternasionalTextField.getText() + ")";
+        String query = "INSERT INTO KegiatanJabatan VALUES (" + IDTextField.getText() + ", '" + JenisTextField.getText() + "'," + InternTextField.getText() + "," + DIYTextField.getText()+ ", " + NasionalTextField.getText()+ ", " + InternasionalTextField.getText() + ")";
         executeQuery(query);
-        showPrestasi();
+        showJabatan();
     }
     
     private void updateRecord(){
-        String query = "UPDATE KegiatanPrestasi SET JenisPrestasi = '" + JenisTextField.getText() + "',  PoinIntern = " + InternTextField.getText() + " , PoinDIY = " + DIYTextField.getText() + " , PoinNasional = " + NasionalTextField.getText()+ " , PoinInternasional = " + InternasionalTextField.getText() + " WHERE IDPrestasi = " + IDTextField.getText() + "";
+        String query = "UPDATE KegiatanJabatan SET JenisJabatan = '" + JenisTextField.getText() + "', PoinIntern = " + InternTextField.getText() + " , PoinDIY = " + DIYTextField.getText() + ", PoinInternasional = " + InternasionalTextField.getText() + " WHERE IDJabatan = " + IDTextField.getText() + "";
         executeQuery(query);
-        showPrestasi();
+        showJabatan();
         
     }
     
     private void deleteButton(){
-        String query = "DELETE FROM KegiatanPrestasi WHERE IDPrestasi = '" + IDTextField.getText() + "'";
+        String query = "DELETE FROM KegiatanJabatan WHERE IDJabatan = '" + IDTextField.getText() + "'";
         executeQuery(query);
-        showPrestasi();
+        showJabatan();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        showPrestasi();
+        showJabatan();
     }
 
     private void executeQuery(String query) {

@@ -19,7 +19,7 @@ public class DatabaseConnection {
         try{
             Class.forName("org.sqlite.JDBC");
             //ubah dengan letak db di laptop masing2
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\acer\\Documents\\NetBeansProjects\\SistemCatatPoinKeaktifan\\db\\database.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:D:\\Documents\\Sem 5\\RPL\\Project paling fix pake banget nget\\SistemCatatPoinKeaktifan\\db\\database.db");
             return conn;
         } catch (Exception e){
             System.out.println(e.getMessage());
