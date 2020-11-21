@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -85,6 +86,7 @@ public class KemahasiswaanController implements Initializable{
         
     }
     
+    
     public ObservableList<Kemahasiswaan> getKemahasiswaanList(){
         ObservableList<Kemahasiswaan> kegiatankemahasiswaanList = FXCollections.observableArrayList();
         DatabaseConnection connectNow = new DatabaseConnection();
@@ -105,11 +107,12 @@ public class KemahasiswaanController implements Initializable{
             ex.printStackTrace();
         }
         return kegiatankemahasiswaanList;
-    }
+    }    
     
     public void showKemahasiswaan(){
+
         ObservableList<Kemahasiswaan> list = getKemahasiswaanList();
-        
+
         colID.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("IDKegiatan"));
         colJenis.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("JenisKegiatan"));
         colPoin.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("Poin"));
@@ -117,7 +120,6 @@ public class KemahasiswaanController implements Initializable{
         
         kemahasiswaanTableView.setItems(list);
     }
-    
     private void insertRecord(){
         String query = "INSERT INTO kegiatankemahasiswaan VALUES (" + IDTextField.getText() + ", '" + JenisTextField.getText() + "'," + PoinTextField.getText() + ",'" + SifatTextField.getText() + "')";
         executeQuery(query);

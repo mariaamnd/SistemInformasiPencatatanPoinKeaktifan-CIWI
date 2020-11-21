@@ -19,12 +19,12 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="268.0" layoutY="262.0" text="LOGIN SEBAGAI :">
+      <Label layoutX="250.0" layoutY="262.0" text="LOGIN SEBAGAI :">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <Button fx:id="adminButton" layoutX="222.0" layoutY="313.0" mnemonicParsing="false" onAction="#switchToAdmin" text="ADMIN" />
-      <Button fx:id="mahasiswaButton" layoutX="350.0" layoutY="313.0" mnemonicParsing="false" onAction="#switchToPrimary" text="MAHASISWA" />
+      <Button fx:id="adminButton" layoutX="190.0" layoutY="313.0" mnemonicParsing="false" onAction="#switchToAdmin" text="ADMIN" />
+      <Button fx:id="mahasiswaButton" layoutX="331.0" layoutY="313.0" mnemonicParsing="false" onAction="#switchToPrimary" text="MAHASISWA" />
    </children>
 </AnchorPane>

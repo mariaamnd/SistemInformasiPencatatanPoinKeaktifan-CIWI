@@ -29,7 +29,7 @@
             <TextField fx:id="passwordTextField" layoutX="10.0" layoutY="87.0" />
          </children>
       </VBox>
-      <TableView layoutX="309.0" layoutY="48.0" prefHeight="314.0" prefWidth="454.0">
+      <TableView fx:id="tvMenu1Admin" layoutX="309.0" layoutY="48.0" prefHeight="314.0" prefWidth="454.0">
         <columns>
           <TableColumn fx:id="colID" prefWidth="44.79998779296875" text="ID" />
           <TableColumn fx:id="colFirst" prefWidth="104.7999267578125" text="Firstname" />
@@ -38,9 +38,9 @@
             <TableColumn fx:id="colPassword" prefWidth="115.99993896484375" text="Password" />
         </columns>
       </TableView>
-      <Button fx:id="deleteButton" layoutX="474.0" layoutY="378.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="insertButton" layoutX="163.0" layoutY="235.0" mnemonicParsing="false" text="Insert" />
-      <Button fx:id="updateButton" layoutX="546.0" layoutY="378.0" mnemonicParsing="false" text="Update" />
+      <Button fx:id="deleteButton" layoutX="474.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Delete" />
+      <Button fx:id="insertButton" layoutX="166.0" layoutY="237.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Insert" />
+      <Button fx:id="updateButton" layoutX="546.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Update" />
       <Button fx:id="backButton" layoutX="23.0" layoutY="434.0" mnemonicParsing="false" onAction="#cancelSwitchTampilan" text="Kembali" />
       <Label layoutX="336.0" layoutY="14.0" text="ACCOUNT MAHASISWA">
          <font>
