@@ -12,18 +12,18 @@ package com.mycompany.sistemcatatpoinkeaktifan;
 public class Prestasi {
     private int IDPrestasi;
     private String JenisPrestasi;
-    private int PoinIntern;
-    private int PoinDIY;
-    private int PoinNasional;
-    private int PoinInternasional;
+    private String TingkatPrestasi;
+    private String Keterangan;
+    private String Tanggal;
+    private int Poin;
 
-    public Prestasi(int IDPrestasi, String JenisPrestasi, int PoinIntern, int PoinDIY, int PoinNasional, int PoinInternasional) {
+    public Prestasi(int IDPrestasi, String JenisPrestasi, String TingkatPrestasi, String Keterangan, String Tanggal, int Poin) {
         this.IDPrestasi = IDPrestasi;
         this.JenisPrestasi = JenisPrestasi;
-        this.PoinIntern = PoinIntern;
-        this.PoinDIY = PoinDIY;
-        this.PoinNasional = PoinNasional;
-        this.PoinInternasional = PoinInternasional;
+        this.TingkatPrestasi = TingkatPrestasi;
+        this.Keterangan = Keterangan;
+        this.Tanggal = Tanggal;
+        this.Poin = Poin;
     }
 
     public int getIDPrestasi() {
@@ -34,20 +34,20 @@ public class Prestasi {
         return JenisPrestasi;
     }
 
-    public int getPoinIntern() {
-        return PoinIntern;
+    public String getTingkatPrestasi() {
+        return TingkatPrestasi;
     }
 
-    public int getPoinDIY() {
-        return PoinDIY;
+    public String getKeterangan() {
+        return Keterangan;
     }
     
-    public int getPoinNasional() {
-        return PoinNasional;
+    public String getTanggal() {
+        return Tanggal;
     }
     
-    public int getPoinInternasional() {
-        return PoinInternasional;
+    public int getPoin() {
+        return Poin;
     }
 
     

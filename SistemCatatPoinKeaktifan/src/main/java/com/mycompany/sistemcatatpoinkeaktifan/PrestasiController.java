@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -40,16 +41,10 @@ public class PrestasiController implements Initializable{
     private TextField IDTextField;
 
     @FXML
-    private TextField JenisTextField;
-
-    @FXML
-    private TextField InternTextField;
-
-    @FXML
-    private TextField DIYTextField;
+    private TextField KeteranganTextField;
     
     @FXML
-    private TextField NasionalTextField;
+    private TextField TanggalTextField;
     
     @FXML
     private TextField InternasionalTextField;
@@ -64,13 +59,13 @@ public class PrestasiController implements Initializable{
     private TableColumn<Prestasi, String> colJenis;
 
     @FXML
-    private TableColumn<Prestasi, Integer> colIntern;
+    private TableColumn<Prestasi, String> colTingkat;
 
     @FXML
-    private TableColumn<Prestasi, Integer> colDIY;
+    private TableColumn<Prestasi, String> colKeterangan;
     
     @FXML
-    private TableColumn<Prestasi, Integer> colNasional;
+    private TableColumn<Prestasi, String> colTanggal;
     
     @FXML
     private TableColumn<Prestasi, Integer> colInternasional;
@@ -83,6 +78,15 @@ public class PrestasiController implements Initializable{
 
     @FXML
     private Button deleteButton;
+    
+    @FXML 
+    public ComboBox<String> combobox;
+    
+     @FXML 
+    public ComboBox<String> combobox1;
+    
+    ObservableList<String> list = FXCollections.observableArrayList("Juara I", "Juara II", "Juara III", "Juara Harapan I", "Juara Harapan II", "Pembicara Seminar", "Moderator Seminar", "Peserta Seminar/Utusan", "Penulis Artikel");
+    ObservableList<String> list1 = FXCollections.observableArrayList("Intern", "DIY", "Nasional", "Internasional");
     
     @FXML
     private void handleButtonAction(ActionEvent event){
@@ -110,7 +114,7 @@ public class PrestasiController implements Initializable{
             rs = st.executeQuery(query);
             Prestasi kegiatanprestasi;
             while(rs.next()){
-                kegiatanprestasi = new Prestasi(rs.getInt("IDPrestasi"), rs.getString("JenisPrestasi"), rs.getInt("PoinIntern"), rs.getInt("PoinDIY"),rs.getInt("PoinNasional"),rs.getInt("PoinInternasional"));
+                kegiatanprestasi = new Prestasi(rs.getInt("IDPrestasi"), rs.getString("JenisPrestasi"), rs.getString("TingkatPrestasi"), rs.getString("Keterangan"),rs.getString("Tanggal"),rs.getInt("Poin"));
                 kegiatanprestasiList.add(kegiatanprestasi);
             }
         }catch(Exception ex){
@@ -124,22 +128,22 @@ public class PrestasiController implements Initializable{
         
         colID.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("IDPrestasi"));
         colJenis.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("JenisPrestasi"));
-        colIntern.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinIntern"));
-        colDIY.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinDIY"));
-        colNasional.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinNasional"));
-        colInternasional.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("PoinInternasional"));
+        colTingkat.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("TingkatPrestasi"));
+        colKeterangan.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("Keterangan"));
+        colTanggal.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("Tanggal"));
+        colInternasional.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("Poin"));
         
         PrestasiTableView.setItems(list);
     }
     
     private void insertRecord(){
-        String query = "INSERT INTO KegiatanPrestasi VALUES (" + IDTextField.getText() + ", '" + JenisTextField.getText() + "'," + InternTextField.getText() + "," + DIYTextField.getText()+ "," + NasionalTextField.getText()+ "," + InternasionalTextField.getText() + ")";
+        String query = "INSERT INTO KegiatanPrestasi VALUES (" + IDTextField.getText() + ", '" + combobox.getValue() + "', '" + combobox1.getValue() + "', '" + KeteranganTextField.getText()+ "', '" + TanggalTextField.getText()+ "'," + InternasionalTextField.getText() + ")";
         executeQuery(query);
         showPrestasi();
     }
     
     private void updateRecord(){
-        String query = "UPDATE KegiatanPrestasi SET JenisPrestasi = '" + JenisTextField.getText() + "',  PoinIntern = " + InternTextField.getText() + " , PoinDIY = " + DIYTextField.getText() + " , PoinNasional = " + NasionalTextField.getText()+ " , PoinInternasional = " + InternasionalTextField.getText() + " WHERE IDPrestasi = " + IDTextField.getText() + "";
+        String query = "UPDATE KegiatanPrestasi SET JenisPrestasi = '" + combobox.getValue() + "',  TingkatPrestasi = '" + combobox.getValue() + "' , Keterangan = '" + KeteranganTextField.getText() + "' , Tanggal = '" + TanggalTextField.getText() + "' , Poin = " + InternasionalTextField.getText() + " WHERE IDPrestasi = " + IDTextField.getText() + "";
         executeQuery(query);
         showPrestasi();
         
@@ -153,8 +157,17 @@ public class PrestasiController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        combobox.setItems(list);
+        combobox1.setItems(list1);
         showPrestasi();
+        
     }
+    
+    public void comboChanged(ActionEvent event){
+        colJenis.setText(combobox.getValue());
+        colTingkat.setText(combobox1.getValue());
+    }
+    
 
     private void executeQuery(String query) {
         DatabaseConnection connectNow = new DatabaseConnection();
