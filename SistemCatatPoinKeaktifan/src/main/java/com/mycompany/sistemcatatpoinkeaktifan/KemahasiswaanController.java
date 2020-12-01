@@ -14,10 +14,14 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -36,18 +40,19 @@ public class KemahasiswaanController implements Initializable{
     private void switchToSecondary() throws IOException {
             App.setRoot("secondary");
     }
-    
-      @FXML
+ 
+
+    @FXML
     private TextField IDTextField;
 
     @FXML
-    private TextField JenisTextField;
+    private ComboBox<String> comboJenis;
 
     @FXML
-    private TextField PoinTextField;
+    private Label labelSifat;
 
     @FXML
-    private TextField SifatTextField;
+    private Label labelPoin;
 
     @FXML
     private TableView<Kemahasiswaan> kemahasiswaanTableView;
@@ -74,6 +79,10 @@ public class KemahasiswaanController implements Initializable{
     private Button deleteButton;
     
     @FXML
+    private TextField filterField;
+    
+    
+    @FXML
     private void handleButtonAction(ActionEvent event){
         if(event.getSource() ==  insertButton){
             insertRecord();
@@ -81,11 +90,23 @@ public class KemahasiswaanController implements Initializable{
             updateRecord();
         }else if(event.getSource() == deleteButton){
             deleteButton();
-    }
-        
-        
+    }  
     }
     
+    ObservableList<String> list = FXCollections.observableArrayList();
+    private void organisasi(){
+       list.removeAll(list);
+       String a="Orientasi Kehidupan Akademika";
+       String b="Pengembangan Pribadi/Diri";
+       String c="Pelatihan Kepemimpinan";
+       String d="Keakraban Mahasiswa Prodi";
+       String e="Upacara Peringatan hari besar Nasional";
+       String f="Studi banding Luar Kota";
+       String g="Voluntir Kerja Sosial (min 36 jam)";
+       String h="Mentoring";
+       list.addAll(a,b,c,d,e,f,g,h);
+       comboJenis.getItems().addAll(list);
+   }
     
     public ObservableList<Kemahasiswaan> getKemahasiswaanList(){
         ObservableList<Kemahasiswaan> kegiatankemahasiswaanList = FXCollections.observableArrayList();
@@ -109,7 +130,7 @@ public class KemahasiswaanController implements Initializable{
         return kegiatankemahasiswaanList;
     }    
     
-    public void showKemahasiswaan(){
+   public void showKemahasiswaan(){
 
         ObservableList<Kemahasiswaan> list = getKemahasiswaanList();
 
@@ -119,16 +140,19 @@ public class KemahasiswaanController implements Initializable{
         colSifat.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("Sifat"));
         
         kemahasiswaanTableView.setItems(list);
+        search();
     }
     private void insertRecord(){
-        String query = "INSERT INTO kegiatankemahasiswaan VALUES (" + IDTextField.getText() + ", '" + JenisTextField.getText() + "'," + PoinTextField.getText() + ",'" + SifatTextField.getText() + "')";
+        String query = "INSERT INTO kegiatankemahasiswaan VALUES (" + IDTextField.getText() + ", '" + comboJenis.getValue() + "'," + labelPoin.getText()+ ",'" + labelSifat.getText()  + "')";
         executeQuery(query);
+         search();
         showKemahasiswaan();
     }
     
     private void updateRecord(){
-        String query = "UPDATE kegiatankemahasiswaan SET JenisKegiatan = '" + JenisTextField.getText() + "', Poin = " + PoinTextField.getText() + " , Sifat = '" + SifatTextField.getText() + "' WHERE IDKegiatan = " + IDTextField.getText() + "";
+        String query = "UPDATE kegiatankemahasiswaan SET JenisKegiatan = '" + comboJenis.getValue() + "', Poin = " + labelPoin.getText() + " , Sifat = '" + labelSifat.getText() + "' WHERE IDKegiatan = " + IDTextField.getText() + "";
         executeQuery(query);
+         search();
         showKemahasiswaan();
         
     }
@@ -136,11 +160,49 @@ public class KemahasiswaanController implements Initializable{
     private void deleteButton(){
         String query = "DELETE FROM kegiatankemahasiswaan WHERE IDKegiatan = '" + IDTextField.getText() + "'";
         executeQuery(query);
+        search();
         showKemahasiswaan();
+        
     }
+    
+    @FXML
+    void search(){
+        ObservableList<Kemahasiswaan> list = getKemahasiswaanList();
+
+        colID.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("IDKegiatan"));
+        colJenis.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("JenisKegiatan"));
+        colPoin.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("Poin"));
+        colSifat.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("Sifat"));
+        
+        kemahasiswaanTableView.setItems(list);
+        FilteredList<Kemahasiswaan> filteredData = new FilteredList<>(list, b -> true);
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+        filteredData.setPredicate(kemahasiswaan -> {
+                // If filter text is empty, display all data.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                
+                if (kemahasiswaan.getJenisKegiatan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true; // Filter matches the JenisKegiatan.
+                } else if (kemahasiswaan.getSifat().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true; // Filter matches the Sifat.
+                }
+                return false; // Does not match.
+            });
+        });
+        SortedList<Kemahasiswaan> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(kemahasiswaanTableView.comparatorProperty());
+        kemahasiswaanTableView.setItems(sortedData);
+        
+    }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        organisasi();
+        search();
         showKemahasiswaan();
     }
 
@@ -153,6 +215,37 @@ public class KemahasiswaanController implements Initializable{
             st.execute(query);
         }catch(Exception ex){
             ex.printStackTrace();
+        }
+    }
+    
+     
+    
+    public void comboChanged(ActionEvent event){
+        String jenis = comboJenis.getValue();
+        if(jenis.equals("Orientasi Kehidupan Akademika")){
+            labelPoin.setText("10");
+            labelSifat.setText("Wajib");
+        }else if(jenis.equals("Pengembangan Pribadi/Diri")){
+            labelPoin.setText("10");
+            labelSifat.setText("Wajib");
+        }else if(jenis.equals("Pelatihan Kepemimpinan")){
+            labelPoin.setText("10");
+            labelSifat.setText("Wajib");
+        }else if(jenis.equals("Keakraban Mahasiswa Prodi")){
+            labelPoin.setText("5");
+            labelSifat.setText("Sukarela");
+        }else if(jenis.equals("Upacara Peringatan hari besar Nasional")){
+            labelPoin.setText("3/hadir");
+            labelSifat.setText("Wajib");
+        }else if(jenis.equals("Studi banding Luar Kota")){
+            labelPoin.setText("3");
+            labelSifat.setText("Sukarela");
+        }else if(jenis.equals("Voluntir Kerja Sosial (min 36 jam)")){
+            labelPoin.setText("10");
+            labelSifat.setText("Sukarela");
+        }else if(jenis.equals("Mentoring")){
+            labelPoin.setText("8");
+            labelSifat.setText("Wajib");
         }
     }
     
