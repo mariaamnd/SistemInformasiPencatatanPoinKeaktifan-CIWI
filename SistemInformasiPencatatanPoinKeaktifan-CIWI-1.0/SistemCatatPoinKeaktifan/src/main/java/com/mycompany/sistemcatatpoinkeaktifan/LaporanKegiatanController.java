@@ -98,6 +98,12 @@ public class LaporanKegiatanController implements Initializable {
     @FXML
     private TableColumn<Jabatan, Integer> colPoinJabatan;
     
+    @FXML
+    private void switchToMenuAdmin() throws IOException {
+        App.setRoot("menuAdmin");
+    }
+
+    
     public ObservableList<Kemahasiswaan> getKemahasiswaanList(){
         ObservableList<Kemahasiswaan> kegiatankemahasiswaanList = FXCollections.observableArrayList();
         DatabaseConnection connectNow = new DatabaseConnection();
@@ -199,6 +205,7 @@ public class LaporanKegiatanController implements Initializable {
         
         jabatanTableView.setItems(list);
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         showKemahasiswaan();
