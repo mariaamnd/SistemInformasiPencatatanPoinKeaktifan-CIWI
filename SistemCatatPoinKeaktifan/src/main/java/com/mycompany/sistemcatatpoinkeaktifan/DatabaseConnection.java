@@ -15,11 +15,11 @@ import java.sql.*;
 
 public class DatabaseConnection {
     
-    public Connection getConnection(){
+    public static Connection getConnection(){
         try{
             Class.forName("org.sqlite.JDBC");
             //ubah dengan letak db di laptop masing2
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\acer\\Documents\\NetBeansProjects\\SistemCatatPoinKeaktifan\\db\\database.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\LENOVO\\Documents\\KULIAH\\SEM 5\\RPL\\Project Fix\\SistemCatatPoinKeaktifan\\db\\database.db");
             return conn;
         } catch (Exception e){
             System.out.println(e.getMessage());

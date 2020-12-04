@@ -21,6 +21,15 @@ public class menuAdminController {
     private Button logoutButton;
     
     @FXML
+    private Button buttonLaporanWaktu;
+    
+    @FXML
+    private Button buttonLaporanKegiatan;
+    
+    @FXML
+    private Button buttonPrintLaporan;
+    
+    @FXML
     private void cancelSwitchTampilan() throws IOException {
         App.setRoot("TampilanAwal");
     }
@@ -29,4 +38,16 @@ public class menuAdminController {
     private void accountButton() throws IOException {
         App.setRoot("menu1Admin");
     }
+    
+    @FXML
+    private void switchToLaporanKegiatan() throws IOException {
+        App.setRoot("laporanKegiatan");
+    }
+    
+    @FXML
+    private void PrintLaporan() throws IOException {
+        //App.setRoot("LaporanKegiatan");
+        new Report().setVisible(true);
+    }
+    
 }

@@ -30,14 +30,27 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * FXML Controller class
  *
- * @author LENOVO
+ * @author NATASHA N HARJANTO
  */
-public class LaporanWaktuController implements Initializable {
-    /**
-     * Initializes the controller class.
-     */
+public class LaporanKegiatanController implements Initializable {
+
     @FXML
     private Button backButton;
+    
+    @FXML
+    private TableView<Kemahasiswaan> kemahasiswaanTableView;
+
+    @FXML
+    private TableColumn<Kemahasiswaan, Integer> colIDKemahasiswaan;
+
+    @FXML
+    private TableColumn<Kemahasiswaan, String> colJenisKemahasiswaan;
+
+    @FXML
+    private TableColumn<Kemahasiswaan, Integer> colPoinKemahasiswaan;
+
+    @FXML
+    private TableColumn<Kemahasiswaan, String> colSifatKemahasiswaan;
     
     @FXML
     private TableView<Prestasi> PrestasiTableView;
@@ -47,9 +60,18 @@ public class LaporanWaktuController implements Initializable {
 
     @FXML
     private TableColumn<Prestasi, String> colJenisPrestasi;
+
+    @FXML
+    private TableColumn<Prestasi, String> colTingkatPrestasi;
+
+    @FXML
+    private TableColumn<Prestasi, String> colKeteranganPrestasi;
     
     @FXML
     private TableColumn<Prestasi, String> colTanggal;
+    
+    @FXML
+    private TableColumn<Prestasi, Integer> colPoinPrestasi;
     
     @FXML
     private TableView<Jabatan> jabatanTableView;
@@ -58,17 +80,62 @@ public class LaporanWaktuController implements Initializable {
     private TableColumn<Jabatan, Integer> colIDJabatan;
 
     @FXML
-    private TableColumn<Jabatan, String> colJenisJabatan;
+    private TableColumn<Jabatan, String> colOrganisasi;
     
     @FXML
+    private TableColumn<Jabatan, String> colTingkatJabatan;
+    
+
+    @FXML
+    private TableColumn<Jabatan, String> colJenisJabatan;
+
+    @FXML
+    private TableColumn<Jabatan, String> colKeteranganJabatan;
+
+    @FXML
     private TableColumn<Jabatan, String> colMasa;
+
+    @FXML
+    private TableColumn<Jabatan, Integer> colPoinJabatan;
     
     @FXML
     private void switchToMenuAdmin() throws IOException {
         App.setRoot("menuAdmin");
     }
-        
+
     
+    public ObservableList<Kemahasiswaan> getKemahasiswaanList(){
+        ObservableList<Kemahasiswaan> kegiatankemahasiswaanList = FXCollections.observableArrayList();
+        DatabaseConnection connectNow = new DatabaseConnection();
+        Connection connectDB = connectNow.getConnection();
+        String query = "SELECT * FROM kegiatankemahasiswaan";
+        Statement st;
+        ResultSet rs;
+        
+        try{
+            st = connectDB.createStatement();
+            rs = st.executeQuery(query);
+            Kemahasiswaan kegiatankemahasiswaan;
+            while(rs.next()){
+                kegiatankemahasiswaan = new Kemahasiswaan(rs.getInt("IDKegiatan"), rs.getString("JenisKegiatan"), rs.getInt("Poin"), rs.getString("Sifat"));
+                kegiatankemahasiswaanList.add(kegiatankemahasiswaan);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return kegiatankemahasiswaanList;
+    }
+    public void showKemahasiswaan(){
+
+        ObservableList<Kemahasiswaan> list = getKemahasiswaanList();
+
+        colIDKemahasiswaan.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("IDKegiatan"));
+        colJenisKemahasiswaan.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("JenisKegiatan"));
+        colPoinKemahasiswaan.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, Integer>("Poin"));
+        colSifatKemahasiswaan.setCellValueFactory(new PropertyValueFactory<Kemahasiswaan, String>("Sifat"));
+        
+        kemahasiswaanTableView.setItems(list);
+    }
     public ObservableList<Prestasi> getPrestasiList(){
         ObservableList<Prestasi> kegiatanprestasiList = FXCollections.observableArrayList();
         DatabaseConnection connectNow = new DatabaseConnection();
@@ -95,7 +162,10 @@ public class LaporanWaktuController implements Initializable {
         
         colIDPrestasi.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("IDPrestasi"));
         colJenisPrestasi.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("JenisPrestasi"));
+        colTingkatPrestasi.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("TingkatPrestasi"));
+        colKeteranganPrestasi.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("Keterangan"));
         colTanggal.setCellValueFactory(new PropertyValueFactory<Prestasi, String>("Tanggal"));
+        colPoinPrestasi.setCellValueFactory(new PropertyValueFactory<Prestasi, Integer>("Poin"));
         
         
         PrestasiTableView.setItems(list);
@@ -125,8 +195,12 @@ public class LaporanWaktuController implements Initializable {
         ObservableList<Jabatan> list = getJabatanList();
         
         colIDJabatan.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("IDJabatan"));
+        colOrganisasi.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("Organisasi"));
+        colTingkatJabatan.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("Tingkat"));
         colJenisJabatan.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("JenisJabatan"));
+        colKeteranganJabatan.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("Keterangan"));
         colMasa.setCellValueFactory(new PropertyValueFactory<Jabatan, String>("MasaJabatan"));
+        colPoinJabatan.setCellValueFactory(new PropertyValueFactory<Jabatan, Integer>("Poin"));
         
         
         jabatanTableView.setItems(list);
@@ -134,6 +208,7 @@ public class LaporanWaktuController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        showKemahasiswaan();
         showPrestasi();
         showJabatan();
     }    
