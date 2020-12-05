@@ -45,6 +45,11 @@ public class menuAdminController {
     }
     
     @FXML
+    private void switchToReportWaktu() throws IOException {
+        App.setRoot("reportWaktu");
+    }
+    
+    @FXML
     private void PrintLaporan() throws IOException {
         //App.setRoot("LaporanKegiatan");
         new Report().setVisible(true);
